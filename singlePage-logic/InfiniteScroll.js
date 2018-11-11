@@ -19,32 +19,34 @@
 		if(x.length!==0){
 			if(x.contains('listen-scroll')){
 				c.info(' detect eos (end of scroll)');
+				const eos=(s)=>{
+					c.info(s,'(eos)');
+					swapClass(Body,'reached-top','reached-bottom');
+					const m=ƒB;
+					for(const i of m){i(o)}
+				};
 				let Y=w.scrollY<<0;
 				//
 				ƒR[0]=o=>{
 					c.log('resize! callback:',0,'update?')
 				};
 				//
-				const ƒS0=o=>{
+				ƒS[0]=o=>{
 					const y=w.scrollY<<0;
 					c.log('scroll! callback:',0,'y | prev:',Y,'curr:',y);
 					if(y!==0){
 						if(y!==Y){
 							if(y>Y){
-								let e=Html;
-								e=e.scrollHeight-(y+e.clientHeight);
-								if(e!==0){
+								if((Html.scrollHeight-(y+Html.clientHeight))!==0){
 									c.info('scrolled: down')
 								}else{
-									swapClass(Body,'reached-top','reached-bottom');
-									w.removeEventListener('scroll',debouncerƒS);
-									c.info('reached: bottom');
-									const m=ƒB;
-									for(const i of m){i(o)}
+									eos('reached: bottom')
 								}
 							}else{
-								c.info('scrolled: up');
+								c.info('scrolled: up')
 							}
+						}else{
+							eos('is: bottom')
 						}
 					}else{
 						swapClass(Body,'reached-bottom','reached-top');
@@ -52,30 +54,24 @@
 					};
 					Y=y
 				};
-				ƒS[0]=ƒS0;
 				//
 				if(x.contains('scroll-is-infinite')){
+					let requesting=false;
 					ƒB[0]=o=>{
-						c.log('eos! callback:',0,'append more contents');
-						//...
-						//w.addEventListener('scroll',debouncerƒS);
+						if(requesting){
+							c.log('eos! callback:',0,'loading data');
+						}else{
+							requesting=true;
+							c.log('eos! callback:',0,'load data');//append more contents
+						}
 					};
 				}
 			}
 		};
 		//
-		x=(s,m)=>{
-			let f=null;
-			if(m.length!==0){
-				w.addEventListener(s,f=debounce(o=>{
-					c.info('%O %s %O',w,o.type,o);
-					for(const i of m){i(o)}
-				}))
-			};
-			return f
-		};
+		x=(s,m)=>{if(m.length!==0){w.addEventListener(s,debounce(o=>{c.info('%O %s %O',w,o.type,o);for(const i of m){i(o)}}))}};
 		x('resize',ƒR);
-		const debouncerƒS=x('scroll',ƒS);//touchmove?
+		x('scroll',ƒS);//touchmove?
 		x=null
 	};
 	if(w.document.readyState!=='complete'){once(w,'load',o=>{ƒ(o)})}else{ƒ(null)}
